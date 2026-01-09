@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fluxmall.domain.member.mapper.MemberMapper">
+
+  <resultMap id="memberResultMap" type="com.fluxmall.domain.member.entity.Member">
+    <id property="id" column="id"/>
+    <result property="username" column="username"/>
+    <result property="password" column="password"/>
+    <result property="nickname" column="nickname"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+
+  <!-- 기본 CRUD id 정의 -->
+  <select id="findById" resultMap="memberResultMap"/>
+  <select id="findByUsername" resultMap="memberResultMap"/>
+  <select id="findByNickname" resultType="boolean"/>
+  <insert id="save" useGeneratedKeys="true" keyProperty="id"/>
+  <update id="update"/>
+  <update id="updatePassword"/>
+
+</mapper>
