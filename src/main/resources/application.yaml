@@ -10,10 +10,13 @@ spring:
       connection-timeout: 30000
 
 mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.fluxmall.domain.**.dto, com.fluxmall.domain.**.entity
   configuration:
     map-underscore-to-camel-case: true
-    jdbc-type-for-null: NULL #!?????
-  mapper-locations: classpath:mapper/*.xml
+    # 쿼리 결과가 null일 때 필드에 null을 설정 (false면 필드 자체가 생성 안 됨)
+    call-setters-on-nulls: true
+    default-statement-timeout: 30
 
 # JWT ?? ??
 jwt:

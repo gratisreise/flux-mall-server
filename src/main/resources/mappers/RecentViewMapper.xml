@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fluxmall.domain.recentview.mapper.RecentViewMapper">
+
+  <resultMap id="recentViewResultMap" type="com.fluxmall.domain.recentview.entity.RecentView">
+    <id property="id" column="id"/>
+    <result property="memberId" column="member_id"/>
+    <result property="productId" column="product_id"/>
+    <result property="viewedAt" column="viewed_at"/>
+    <association property="product" javaType="com.fluxmall.domain.product.entity.Product" resultMap="com.fluxmall.domain.product.mapper.ProductMapper.productResultMap"/>
+  </resultMap>
+
+  <select id="findAllByMemberIdOrderByViewedAtDesc" resultMap="recentViewResultMap"/>
+  <insert id="saveOrUpdate"/>
+  <delete id="deleteOldestOverLimit"/>
+
+</mapper>
