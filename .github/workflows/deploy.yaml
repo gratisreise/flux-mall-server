@@ -1,0 +1,58 @@
+#name: Java CI/CD (GCP Artifact Registry)
+#
+#on:
+#  pull_request:
+#    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
+#
+#env:
+#  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+#  REGION: asia-northeast3 # 서울 리전
+#  REPOSITORY: flux-mall # Artifact Registry 저장소 이름
+#  IMAGE_NAME: flux-mall-server
+#
+#jobs:
+#  pipeline:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      # 1. GCP 인증 (Service Account Key 필요)
+#      - id: 'auth'
+#        uses: 'google-github-actions/auth@v1'
+#        with:
+#          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+#
+#      # 2. Docker를 GCP AR에 인증
+#      - name: 'Set up Cloud SDK'
+#        uses: 'google-github-actions/setup-gcloud@v1'
+#
+#      - name: 'Docker Auth'
+#        run: |
+#          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+#
+#      # [CI] 테스트 및 빌드 (PR/Merge 공통)
+#      - name: Test & Coverage
+#        run: ./gradlew test jacocoTestReport
+#
+#      - name: Build Docker Image
+#        run: |
+#          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+#
+#      # [CD] Merge 시에만 GCP AR로 푸시 및 배포
+#      - name: Push Image to AR
+#        if: github.event_name == 'push'
+#        run: |
+#          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+#
+#      - name: Deploy to GCP VM
+#        if: github.event_name == 'push'
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.GCP_STATIC_IP }}
+#          username: ${{ secrets.GCP_USER }}
+#          key: ${{ secrets.GCP_SSH_KEY }}
+#          script: |
+#            # 서버 내부 스크립트에 이미지 전체 경로 전달
+#            sudo bash /home/${{ secrets.GCP_USER }}/deploy.sh ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}

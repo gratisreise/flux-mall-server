@@ -1,7 +1,8 @@
 package com.fluxmall.mapper;
 
-import com.fluxmall.domain.member.entity.Member;
+import com.fluxmall.domain.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
+
 
 @Mapper
 public interface MemberMapper {

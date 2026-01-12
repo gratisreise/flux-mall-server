@@ -1,7 +1,9 @@
 package com.fluxmall.service;
 
 
+import com.fluxmall.domain.entity.ShippingAddress;
 import com.fluxmall.mapper.ShippingAddressMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

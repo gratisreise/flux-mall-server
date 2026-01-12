@@ -2,6 +2,8 @@ package com.fluxmall.service;
 
 
 
+import com.fluxmall.domain.entity.Cart;
+import com.fluxmall.domain.entity.CartItem;
 import com.fluxmall.mapper.CartMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
