@@ -12,11 +12,11 @@
   </resultMap>
 
   <!-- 기본 CRUD id 정의 -->
-  <select id="findById" resultMap="memberResultMap"/>
-  <select id="findByUsername" resultMap="memberResultMap"/>
-  <select id="findByNickname" resultType="boolean"/>
-  <insert id="save" useGeneratedKeys="true" keyProperty="id"/>
-  <update id="update"/>
-  <update id="updatePassword"/>
+<!--  <select id="findById" resultMap="memberResultMap"/>-->
+<!--  <select id="findByUsername" resultMap="memberResultMap"/>-->
+<!--  <select id="findByNickname" resultType="boolean"/>-->
+<!--  <insert id="save" useGeneratedKeys="true" keyProperty="id"/>-->
+<!--  <update id="update"/>-->
+<!--  <update id="updatePassword"/>-->
 
 </mapper>

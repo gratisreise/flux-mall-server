@@ -10,10 +10,10 @@
     <association property="product" javaType="com.fluxmall.domain.product.entity.Product" resultMap="com.fluxmall.domain.product.mapper.ProductMapper.productResultMap"/>
   </resultMap>
 
-  <select id="existsByMemberIdAndProductId" resultType="boolean"/>
-  <select id="findAllByMemberId" resultMap="wishlistResultMap"/>
-  <insert id="save"/>
-  <delete id="deleteByMemberIdAndProductId"/>
-  <delete id="deleteSelected"/>
+<!--  <select id="existsByMemberIdAndProductId" resultType="boolean"/>-->
+<!--  <select id="findAllByMemberId" resultMap="wishlistResultMap"/>-->
+<!--  <insert id="save"/>-->
+<!--  <delete id="deleteByMemberIdAndProductId"/>-->
+<!--  <delete id="deleteSelected"/>-->
 
 </mapper>

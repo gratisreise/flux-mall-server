@@ -1,6 +1,7 @@
 package com.fluxmall.service;
 
 
+import com.fluxmall.domain.entity.Wishlist;
 import com.fluxmall.mapper.WishlistMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

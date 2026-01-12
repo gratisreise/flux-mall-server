@@ -1,10 +1,10 @@
 package com.fluxmall.mapper;
 
-import com.fluxmall.domain.order.entity.Order;
-import com.fluxmall.domain.order.entity.OrderItem;
-import org.apache.ibatis.annotations.Mapper;
 
+import com.fluxmall.domain.entity.Order;
+import com.fluxmall.domain.entity.OrderItem;
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface OrderMapper {

@@ -21,13 +21,13 @@
     </collection>
   </resultMap>
 
-  <select id="findByMemberId" resultMap="cartResultMap"/>
-  <insert id="createCart" useGeneratedKeys="true" keyProperty="id"/>
+<!--  <select id="findByMemberId" resultMap="cartResultMap"/>-->
+<!--  <insert id="createCart" useGeneratedKeys="true" keyProperty="id"/>-->
 
-  <!-- CartItem 전용 -->
-  <insert id="addCartItem" useGeneratedKeys="true" keyProperty="id"/>
-  <update id="updateCartItemQuantity"/>
-  <delete id="deleteCartItem"/>
-  <delete id="deleteSelectedCartItems"/>
+<!--  &lt;!&ndash; CartItem 전용 &ndash;&gt;-->
+<!--  <insert id="addCartItem" useGeneratedKeys="true" keyProperty="id"/>-->
+<!--  <update id="updateCartItemQuantity"/>-->
+<!--  <delete id="deleteCartItem"/>-->
+<!--  <delete id="deleteSelectedCartItems"/>-->
 
 </mapper>

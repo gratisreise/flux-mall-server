@@ -1,6 +1,7 @@
 package com.fluxmall.mapper;
 
-import com.fluxmall.domain.wishlist.entity.Wishlist;
+
+import com.fluxmall.domain.entity.Wishlist;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

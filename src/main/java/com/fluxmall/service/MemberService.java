@@ -1,7 +1,11 @@
 package com.fluxmall.service;
 
 
+import com.fluxmall.domain.dto.LoginRequest;
+import com.fluxmall.domain.dto.LoginResponse;
+import com.fluxmall.domain.entity.Member;
 import com.fluxmall.mapper.MemberMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +27,15 @@ public class MemberService {
         return false;
     }
 
-    public void register(Member member) {
-    }
 
     public void updateProfile(Member member) {
     }
 
     public void changePassword(Member member) {
+    }
+
+
+    public LoginResponse login(@Valid LoginRequest request) {
+        return null;
     }
 }

@@ -15,11 +15,11 @@
     <result property="updatedAt" column="updated_at"/>
   </resultMap>
 
-  <select id="findById" resultMap="reviewResultMap"/>
-  <select id="findAllByProductId" resultMap="reviewResultMap"/>
-  <select id="calculateAverageRating" resultType="double"/>
-  <insert id="save" useGeneratedKeys="true" keyProperty="id"/>
-  <update id="update"/>
-  <update id="softDelete"/>
+<!--  <select id="findById" resultMap="reviewResultMap"/>-->
+<!--  <select id="findAllByProductId" resultMap="reviewResultMap"/>-->
+<!--  <select id="calculateAverageRating" resultType="double"/>-->
+<!--  <insert id="save" useGeneratedKeys="true" keyProperty="id"/>-->
+<!--  <update id="update"/>-->
+<!--  <update id="softDelete"/>-->
 
 </mapper>
