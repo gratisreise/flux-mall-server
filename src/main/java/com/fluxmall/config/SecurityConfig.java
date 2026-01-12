@@ -2,6 +2,7 @@ package com.fluxmall.config;
 
 import com.fluxmall.filter.ExceptionHandlerFilter;
 import com.fluxmall.filter.JwtAuthenticationFilter;
+import com.fluxmall.service.auth.TokenBlacklistService;
 import com.fluxmall.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +20,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-//@EnableWebSecurity
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-//    private final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         return http
             .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
             .formLogin(AbstractHttpConfigurer::disable)  // 폼 로그인 비활성화
@@ -36,21 +39,21 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             // 요청 정책
-//            .authorizeHttpRequests(auth -> auth
-//                .requestMatchers(PUBLIC_ENDPOINTS).permitAll() // 해당 url 허용
-//                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-//                .requestMatchers("/api/seller/**").hasRole("SELLER")
-//                .anyRequest().authenticated() // 나머지 접근 방지
-//            )
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll() // 해당 url 허용
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/seller/**").hasRole("SELLER")
+                .anyRequest().authenticated() // 나머지 접근 방지
+            )
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 
             //jwt 커스텀필터 넣기
-//            .addFilterBefore(
-//                new ExceptionHandlerFilter(),
-//                UsernamePasswordAuthenticationFilter.class)
-//            .addFilterBefore(
-//                new JwtAuthenticationFilter(jwtUtil),
-//                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(
+                new ExceptionHandlerFilter(),
+                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(
+                new JwtAuthenticationFilter(jwtUtil, userDetailsService, tokenBlacklistService),
+                UsernamePasswordAuthenticationFilter.class)
 
             .build();
     }
