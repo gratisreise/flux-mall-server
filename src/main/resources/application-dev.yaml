@@ -19,8 +19,8 @@ spring:
     baseline-on-migrate: true
 
 jwt:
-  access_secret: ${JWT_ACCESS_SECRET}
-  refersh_secret: ${JWT_REFRESH_SECRET}
+  access-secret: ${JWT_ACCESS_SECRET}
+  refresh-secret: ${JWT_REFRESH_SECRET}
 
 logging:
   level:
