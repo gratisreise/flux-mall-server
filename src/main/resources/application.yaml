@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev  # ??? prod? ??(???? ??????)
+    active: dev
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -9,29 +9,31 @@ spring:
       minimum-idle: 5
       connection-timeout: 30000
 
+  cloud:
+    aws:
+      s3:
+        region: ap-northeast-2 # 서울 리전
+      credentials:
+        access-key: AKIAXXXXXXXXXXXX  # IAM 액세스키
+        secret-key: xxxxxxxxxxxxxxxxxxxx  # IAM 시크릿키
+
+
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.fluxmall.domain.**.dto, com.fluxmall.domain.**.entity
   configuration:
     map-underscore-to-camel-case: true
-    # 쿼리 결과가 null일 때 필드에 null을 설정 (false면 필드 자체가 생성 안 됨)
     call-setters-on-nulls: true
     default-statement-timeout: 30
 
-# JWT ?? ??
+# JWT
 jwt:
-  access-token-expiration: 1800000    # 30? (ms)
-  refresh-token-expiration: 604800000 # 7? (ms)
 
-# AWS S3 ??
-cloud:
-  aws:
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
+  access-expiration: 1800000    # 30분 (ms)
+  refresh-expiration: 604800000 # 7일 (ms)
 
-# Actuator ??
+
+# Actuator
 management:
   endpoints:
     web:
@@ -41,7 +43,7 @@ management:
     health:
       show-details: when_authorized
 
-# Logging ??
+# Logging
 logging:
   level:
     com.fluxmall: INFO

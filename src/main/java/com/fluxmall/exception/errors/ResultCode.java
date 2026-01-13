@@ -3,7 +3,6 @@ package com.fluxmall.exception.errors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Getter

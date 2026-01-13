@@ -29,9 +29,9 @@ public class ResponseService {
         return result;
     }
 
-    //잡힌에러
-    public static CommonResult getFailResult(BusinessException exception) {
-        return CommonResult.filtered(exception);
+    // 잡힌에러
+    public static CommonResult getFailResult(BusinessException ex) {
+        return CommonResult.filtered(ex);
     }
 
     //못잡힌 에러

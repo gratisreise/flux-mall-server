@@ -1,6 +1,6 @@
 package com.fluxmall.mapper;
 
-import com.fluxmall.domain.member.entity.Member;
+import com.fluxmall.domain.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -10,11 +10,15 @@ public interface MemberMapper {
 
     Member findByUsername(String username);
 
-    boolean findByNickname(String nickname);
+    Member findByNickname(String nickname);
 
-    void save(Member member);
+    boolean existsByUsername(String username);
 
-    void update(Member member);
+    boolean existsByNickname(String nickname);
 
-    void updatePassword(Member member);
+    void insertMember(Member member);
+
+    void updateMember(Member member);
+
+    void updatePassword(Long memberId, String encodedPassword);
 }

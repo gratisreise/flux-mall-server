@@ -1,9 +1,9 @@
 package com.fluxmall.mapper;
 
-import com.fluxmall.domain.review.entity.Review;
-import org.apache.ibatis.annotations.Mapper;
 
+import com.fluxmall.domain.entity.Review;
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ReviewMapper {

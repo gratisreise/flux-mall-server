@@ -1,6 +1,7 @@
 package com.fluxmall.service;
 
 
+import com.fluxmall.domain.entity.Review;
 import com.fluxmall.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
