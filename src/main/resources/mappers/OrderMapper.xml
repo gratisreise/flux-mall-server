@@ -19,11 +19,11 @@
     </collection>
   </resultMap>
 
-  <select id="findById" resultMap="orderResultMap"/>
-  <select id="findAllByMemberId" resultMap="orderResultMap"/>
-  <insert id="saveOrder" useGeneratedKeys="true" keyProperty="id"/>
-  <insert id="saveOrderItem" useGeneratedKeys="true" keyProperty="id"/>
-  <update id="updateOrderStatus"/>
-  <update id="cancelOrder"/>
+<!--  <select id="findById" resultMap="orderResultMap"/>-->
+<!--  <select id="findAllByMemberId" resultMap="orderResultMap"/>-->
+<!--  <insert id="saveOrder" useGeneratedKeys="true" keyProperty="id"/>-->
+<!--  <insert id="saveOrderItem" useGeneratedKeys="true" keyProperty="id"/>-->
+<!--  <update id="updateOrderStatus"/>-->
+<!--  <update id="cancelOrder"/>-->
 
 </mapper>

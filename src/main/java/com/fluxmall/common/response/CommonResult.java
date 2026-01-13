@@ -1,7 +1,6 @@
 package com.fluxmall.common.response;
 
 import com.fluxmall.exception.BusinessException;
-import com.fluxmall.exception.errors.ResultCode;
 import com.fluxmall.exception.errors.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

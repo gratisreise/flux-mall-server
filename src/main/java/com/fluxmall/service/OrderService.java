@@ -2,9 +2,12 @@ package com.fluxmall.service;
 
 
 
+import com.fluxmall.domain.entity.Order;
+import com.fluxmall.domain.entity.OrderItem;
 import com.fluxmall.mapper.OrderMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

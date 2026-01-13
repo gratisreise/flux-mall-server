@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
         return ResponseService.getFailResult(e);
     }
 
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult handleRuntimeException(RuntimeException e) {
         return ResponseService.getFailResult(e);
