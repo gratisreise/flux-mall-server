@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)  // @PreAuthorize 활성화
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -40,13 +42,11 @@ public class SecurityConfig {
             )
             // 요청 정책
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(PUBLIC_ENDPOINTS).permitAll() // 해당 url 허용
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/seller/**").hasRole("SELLER")
-                .anyRequest().authenticated() // 나머지 접근 방지
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll() // 공개 엔드포인트 허용
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")  // ADMIN 역할 필요
+                .requestMatchers("/api/seller/**").hasRole("SELLER")  // SELLER 역할 필요
+                .anyRequest().authenticated() // 나머지는 인증 필요
             )
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-
             //jwt 커스텀필터 넣기
             .addFilterBefore(
                 new ExceptionHandlerFilter(),
@@ -71,22 +71,24 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
         // 회원가입 및 로그인 (JWT 토큰 발급)
-        "/api/members/signup",      // 회원가입 (이메일/비밀번호/닉네임 중복 체크 포함)
-        "/api/members/login",       // 로그인 (JWT 발급)
+        "/api/members/register",    // 회원가입
+        "/api/auth/login",           // 로그인 (JWT 발급)
+        "/api/auth/refresh",         // 토큰 재발급
 
         // 상품 도메인 - 비로그인 사용자도 접근 가능
-        "/api/products",            // 상품 목록 조회 (페이징, 필터링, 정렬)
-        "/api/products/search",     // 키워드 검색
-        "/api/products/{id}",       // 상품 상세 조회 (재고, 평점 포함)
-        "/api/products/{id}/reviews",
+        "/api/products",             // 상품 목록 조회 (페이징, 필터링, 정렬)
+        "/api/products/search",      // 키워드 검색
+        "/api/products/{id}",        // 상품 상세 조회 (재고, 평점 포함)
+        "/api/products/{id}/reviews",// 리뷰 목록 조회
 
+        // 정적 리소스
         "/css/**",
         "/js/**",
         "/images/**",
         "/img/**",
         "/assets/**",
         "/favicon.ico",
-        "/webjars/**",              // Swagger UI 등에서 사용
+        "/webjars/**",               // Swagger UI 등에서 사용
 
         // AWS S3 상품/리뷰 이미지 (외부 URL이지만 프록시 경로 존재 시)
         "/s3/images/**",
@@ -97,6 +99,7 @@ public class SecurityConfig {
         "/swagger-ui/**",
 
         // Actuator 모니터링 (보통 health/info는 공개, 나머지는 제한)
-        "/actuator/**",
+        "/actuator/health",
+        "/actuator/info"
     };
 }

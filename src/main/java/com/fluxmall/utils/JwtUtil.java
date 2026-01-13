@@ -42,32 +42,41 @@ public class JwtUtil {
         return (expiration.getTime() - now);
     }
 
-
-    public String createAccessToken(String subject, long memberId) {
+    /**
+     * Access Token 생성 (memberId와 role 포함)
+     */
+    public String createAccessToken(Long memberId, String role) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + accessValidity);
 
         return Jwts.builder()
-            .subject(subject)
+            .subject(String.valueOf(memberId))
             .claim("memberId", memberId)
+            .claim("role", role)
             .issuedAt(now)
             .expiration(validity)
             .signWith(accessKey, Jwts.SIG.HS512)
             .compact();
     }
 
-    public String createRefreshToken(String username) {
+    /**
+     * Refresh Token 생성
+     */
+    public String createRefreshToken(Long memberId) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + refreshValidity);
 
         return Jwts.builder()
-            .subject(username)
+            .subject(String.valueOf(memberId))
+            .claim("memberId", memberId)
+            .claim("Role", )
             .issuedAt(now)
             .expiration(validity)
             .signWith(refreshKey, SIG.HS512)
             .compact();
     }
-    public String getRefreshUsername(String token) {
+
+    public String getRefreshSubject(String token) {
         return Jwts.parser()
             .verifyWith(refreshKey)
             .build()
@@ -76,7 +85,7 @@ public class JwtUtil {
             .getSubject();
     }
 
-    public String getUsername(String token) {
+    public String getSubject(String token) {
         return Jwts.parser()
             .verifyWith(accessKey)
             .build()
@@ -94,6 +103,14 @@ public class JwtUtil {
             .get("memberId", Long.class);
     }
 
+    public String getRole(String token) {
+        return Jwts.parser()
+            .verifyWith(accessKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload()
+            .get("role", String.class);
+    }
 
     public boolean validateAccessToken(String token) {
         try {
@@ -107,4 +124,15 @@ public class JwtUtil {
         }
     }
 
+    public boolean validateRefreshToken(String token) {
+        try {
+            Jwts.parser()
+                .verifyWith(refreshKey)
+                .build()
+                .parseSignedClaims(token);
+            return true;
+        } catch (RuntimeException e) {
+            throw new BusinessException(AuthError.INVALID_TOKEN);
+        }
+    }
 }
