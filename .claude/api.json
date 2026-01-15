@@ -1,0 +1,1440 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "FluxMall",
+    "version": "1.0.0",
+    "description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)"
+  },
+  "servers": [
+    {
+      "url": "{{baseUrl}}"
+    }
+  ],
+  "paths": {
+    "/api/members/register": {
+      "post": {
+        "summary": "회원가입 (기본 USER 역할)",
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "description": "비로그인 상태에서 호출. 회원가입 시 기본 역할 = USER",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "nickname": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "username": "buyer123@example.com",
+                "password": "password123",
+                "nickname": "구매자123"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "로그인",
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "description": "성공 시 JWT 발급 (토큰에 role 포함: USER / SELLER / ADMIN)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "username": "buyer123@example.com",
+                "password": "password123"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "로그아웃",
+        "parameters": [
+          {
+            "name": "x-refresh-token",
+            "in": "header",
+            "description": "모든 역할(USER/SELLER/ADMIN) 토큰 사용 가능",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{refreshToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ]
+      }
+    },
+    "/api/members/me": {
+      "get": {
+        "summary": "내 정보 조회",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "USER / SELLER / ADMIN 모두 가능",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "description": "응답에 username, nickname, role 등 포함"
+      },
+      "patch": {
+        "summary": "내 정보 수정",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "nickname": "새닉네임123"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/members/me/addresses": {
+      "get": {
+        "summary": "배송지 목록 조회",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ]
+      },
+      "post": {
+        "summary": "배송지 등록",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "recipientName": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "postcode": {
+                    "type": "string",
+                    "format": "utc-millisec"
+                  },
+                  "address1": {
+                    "type": "string"
+                  },
+                  "address2": {
+                    "type": "string"
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "example": {
+                "recipientName": "홍길동",
+                "phone": "010-1234-5678",
+                "postcode": "12345",
+                "address1": "서울시 강남구 역삼동",
+                "address2": "123-45 빌딩",
+                "isDefault": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/members/me/addresses/{addressId}": {
+      "patch": {
+        "summary": "배송지 수정",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "deprecated": false,
+            "schema": {},
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "recipientName": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address1": {
+                    "type": "string"
+                  },
+                  "address2": {
+                    "type": "string"
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "example": {
+                "recipientName": "홍길동 수정",
+                "phone": "010-9999-8888",
+                "address1": "서울시 강남구 역삼동",
+                "address2": "123-45 빌딩",
+                "isDefault": false
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "addressId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{addressId}}"
+        }
+      ],
+      "delete": {
+        "summary": "배송지 삭제",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ]
+      }
+    },
+    "/api/members/me/addresses/{addressId}/default": {
+      "patch": {
+        "summary": "기본 배송지 설정",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "description": "기존 기본 배송지는 자동으로 해제됨"
+      },
+      "parameters": [
+        {
+          "name": "addressId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{addressId}}"
+        }
+      ]
+    },
+    "/api/products": {
+      "get": {
+        "summary": "상품 목록 조회 (공개)",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "1"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "20"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "전자제품"
+          },
+          {
+            "name": "minPrice",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "10000"
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "500000"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "latest"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "비로그인/모든 역할 가능. 필터: category, minPrice, maxPrice, sort(latest, priceAsc, priceDesc 등), 페이징"
+      }
+    },
+    "/api/products/search": {
+      "get": {
+        "summary": "상품 키워드 검색 (공개)",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "노트북"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "1"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "20"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "비로그인/모든 역할 가능. 상품명·설명 부분 일치 검색"
+      }
+    },
+    "/api/products/{productId}": {
+      "get": {
+        "summary": "상품 상세 조회 (공개)",
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "비로그인/모든 역할 가능. 재고량, 평균 평점, 상품 정보 포함"
+      },
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{productId}}"
+        }
+      ]
+    },
+    "/api/seller/products": {
+      "post": {
+        "summary": "[SELLER 전용] 상품 등록",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "SELLER 역할 토큰만 허용",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{sellerJwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "SELLER만 호출 가능. 등록 시 member_id(판매자 ID) 자동 설정",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "stockQuantity": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "name": "최신 노트북",
+                "description": "고성능 게이밍 노트북입니다.",
+                "category": "전자제품",
+                "price": 1500000,
+                "stockQuantity": 50
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/seller/products/{productId}": {
+      "patch": {
+        "summary": "[SELLER 전용] 상품 정보 수정",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{sellerJwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "SELLER만 호출 가능. 본인이 등록한 상품만 수정 허용",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "stockQuantity": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "name": "최신 노트북 (업그레이드)",
+                "description": "더 강력해진 스펙!",
+                "price": 1600000,
+                "stockQuantity": 45
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{productId}}"
+        }
+      ],
+      "delete": {
+        "summary": "[SELLER 전용] 상품 삭제 (Soft Delete)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{sellerJwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "SELLER만 호출 가능. 본인 상품만 Soft Delete (product_status = DISCONTINUED 등)"
+      }
+    },
+    "/api/seller/products/{productId}/status": {
+      "patch": {
+        "summary": "[SELLER 전용] 품절/판매중 상태 변경",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{sellerJwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "SELLER만 호출 가능. status: SALE / SOLD_OUT 등",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "status": "SOLD_OUT"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{productId}}"
+        }
+      ]
+    },
+    "/api/admin/products/{productId}": {
+      "delete": {
+        "summary": "[ADMIN 전용] 상품 강제 삭제 (예비)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "ADMIN 역할 토큰만 허용",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{adminJwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Product"
+        ],
+        "description": "ADMIN만 호출 가능. 모든 상품 강제 삭제 (Hard Delete 또는 특수 처리)"
+      },
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{productId}}"
+        }
+      ]
+    },
+    "/api/carts": {
+      "get": {
+        "summary": "장바구니 조회",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "USER 역할 토큰 필요 (SELLER/ADMIN 불가)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Cart"
+        ],
+        "description": "현재 장바구니에 담긴 상품 목록 + 예상 총 결제 금액 반환"
+      }
+    },
+    "/api/carts/items": {
+      "post": {
+        "summary": "장바구니에 상품 추가",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Cart"
+        ],
+        "description": "재고 초과 시 에러 반환. 동일 상품 이미 있으면 수량 합산",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "productId": "{{productId}}",
+                "quantity": 2
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "장바구니 선택 상품 일괄 삭제",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Cart"
+        ],
+        "description": "request body에 삭제할 cartItemId 배열 전달",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cartItemIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "cartItemIds": [
+                  1,
+                  3,
+                  5
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts/items/{cartItemId}": {
+      "patch": {
+        "summary": "장바구니 상품 수량 수정",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Cart"
+        ],
+        "description": "재고 초과 방지. quantity는 1 이상",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "quantity": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "quantity": 5
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "cartItemId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{cartItemId}}"
+        }
+      ],
+      "delete": {
+        "summary": "장바구니 상품 개별 삭제",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "summary": "주문 생성 (PENDING 상태)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Order"
+        ],
+        "description": "주문 생성 후 상태 = PENDING\n재고 확인 및 예약\norderItems로 장바구니 전체 또는 바로구매 처리\n성공 시 orderId 반환",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shippingAddressId": {
+                    "type": "string"
+                  },
+                  "orderItems": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "productId": {
+                          "type": "string"
+                        },
+                        "quantity": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "shippingAddressId": "{{addressId}}",
+                "orderItems": [
+                  {
+                    "productId": "{{productId}}",
+                    "quantity": 1
+                  },
+                  {
+                    "productId": 3,
+                    "quantity": 2
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "내 주문 목록 조회",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "1"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "10"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/orders/{orderId}/pay": {
+      "post": {
+        "summary": "결제 요청 (PENDING → PAID)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Order"
+        ],
+        "description": "결제 버튼 클릭 시 호출\n모든 결제 성공 처리 → 상태 PAID + 재고 정식 차감"
+      },
+      "parameters": [
+        {
+          "name": "orderId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{orderId}}"
+        }
+      ]
+    },
+    "/api/orders/{orderId}": {
+      "get": {
+        "summary": "주문 상세 조회",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Order"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "orderId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{orderId}}"
+        }
+      ]
+    },
+    "/api/orders/{orderId}/cancel": {
+      "post": {
+        "summary": "주문 전체 취소",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Order"
+        ],
+        "description": "전체 주문 취소만 지원\n취소 시 모든 상품 재고 원복"
+      },
+      "parameters": [
+        {
+          "name": "orderId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{orderId}}"
+        }
+      ]
+    },
+    "/api/wishlists": {
+      "get": {
+        "summary": "위시리스트 조회",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "1"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "20"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "latest"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "USER 역할 토큰 필요",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Whishlist"
+        ],
+        "description": "찜한 상품 목록 조회 (페이징, 정렬: latest, priceAsc 등)"
+      },
+      "post": {
+        "summary": "상품 찜 추가/해제 (토글)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Whishlist"
+        ],
+        "description": "이미 찜한 상품이면 해제, 아니면 추가 (토글 방식)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "productId": "{{productId}}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wishlists/{productId}": {
+      "delete": {
+        "summary": "상품 찜 해제 (명시적 삭제)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Whishlist"
+        ],
+        "description": "특정 상품만 찜 해제"
+      },
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{productId}}"
+        }
+      ]
+    },
+    "/api/recent-views": {
+      "post": {
+        "summary": "최근 본 상품 기록 (상품 상세 방문 시 호출)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "USER 역할 토큰 필요 (비로그인 시 호출하지 않음)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "RecentViews"
+        ],
+        "description": "상품 상세 페이지 진입/새로고침 시 프론트에서 자동 호출\n이미 기록된 상품이면 viewed_at만 업데이트 (최신으로 이동)\nUNIQUE KEY(member_id, product_id)로 중복 방지",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "productId": "{{productId}}"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "최근 본 상품 목록 조회",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "최대 20~50개 제한 (기본 20)",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "20"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "USER 역할 토큰 필요",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "RecentViews"
+        ],
+        "description": "viewed_at DESC 정렬 (최근 본 순)\n응답에 상품 상세 정보(name, price, image 등) 포함\n서버에서 오래된 기록 자동 관리 (예: 50개 초과 시 가장 오래된 삭제 또는 배치)"
+      }
+    },
+    "/api/products/{productId}/reviews": {
+      "get": {
+        "summary": "상품 리뷰 목록 조회 (공개)",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "1"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": "20"
+          },
+          {
+            "name": "hasImage",
+            "in": "query",
+            "description": "true: 사진 있는 리뷰만",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": "false"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "latest(최신순), ratingDesc(평점 높은 순)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "latest"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Review"
+        ],
+        "description": "비로그인/모든 역할 가능\n응답에 평균 평점, 리뷰 목록(텍스트, 사진, 별점, 작성자 닉네임 등) 포함\n페이징 처리"
+      },
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{productId}}"
+        }
+      ],
+      "post": {
+        "summary": "[USER] 리뷰 작성",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Review"
+        ],
+        "description": "USER만 작성 가능\norderItemId로 구매 확정 검증 (해당 주문의 상품이어야 함)\nrating: 1~5\nimageUrls: 최대 5장 (배열, 선택사항)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orderItemId": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "integer"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "imageUrls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "orderItemId": "{{orderItemId}}",
+                "rating": 5,
+                "content": "정말 좋은 상품입니다! 배송도 빠르고 품질 최고예요.",
+                "imageUrls": [
+                  "https://example.com/review-img1.jpg",
+                  "https://example.com/review-img2.jpg"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews/{reviewId}": {
+      "patch": {
+        "summary": "[USER] 리뷰 수정 (본인만)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Review"
+        ],
+        "description": "본인이 작성한 리뷰만 수정 가능",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "integer"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "imageUrls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "rating": 4,
+                "content": "수정된 리뷰 내용입니다.",
+                "imageUrls": [
+                  "https://example.com/new-img.jpg"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "reviewId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{reviewId}}"
+        }
+      ],
+      "delete": {
+        "summary": "[USER] 리뷰 삭제 (본인만, Soft Delete)",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{jwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Review"
+        ],
+        "description": "본인 리뷰만 Soft Delete (is_deleted = 1)"
+      }
+    },
+    "/api/admin/reviews/{reviewId}": {
+      "delete": {
+        "summary": "[ADMIN 전용] 부적절 리뷰 강제 삭제",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "ADMIN 토큰만 허용",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{adminJwtToken}}"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "Review"
+        ],
+        "description": "신고된 부적절 리뷰 강제 삭제 (Soft 또는 Hard Delete)"
+      },
+      "parameters": [
+        {
+          "name": "reviewId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "{{reviewId}}"
+        }
+      ]
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}
