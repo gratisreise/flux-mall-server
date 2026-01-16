@@ -1,24 +1,36 @@
 package com.fluxmall.cart.repository;
 
-
-
 import com.fluxmall.cart.domain.Cart;
 import com.fluxmall.cart.domain.CartItem;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface CartMapper {
 
+    Cart findById(Long id);
+
     Cart findByMemberId(Long memberId);
 
-    void createCart(Long memberId);
+    List<CartItem> findCartItemsByCartId(Long cartId);
 
-    void addCartItem(CartItem cartItem);
+    CartItem findCartItemById(Long id);
 
-    void updateCartItemQuantity(CartItem cartItem);
+    CartItem findCartItemByCartIdAndProductId(@Param("cartId") Long cartId, @Param("productId") Long productId);
 
-    void deleteCartItem(Long cartItemId);
+    void insertCart(Cart cart);
 
-    void deleteSelectedCartItems(List<Long> cartItemIds);
+    void insertCartItem(CartItem cartItem);
+
+    void updateCartItemQuantity(@Param("id") Long id, @Param("quantity") int quantity);
+
+    void deleteCart(Long id);
+
+    void deleteCartItem(Long id);
+
+    void deleteCartItemsByCartId(Long cartId);
+
+    void deleteCartItemsByIds(@Param("ids") List<Long> ids);
 }

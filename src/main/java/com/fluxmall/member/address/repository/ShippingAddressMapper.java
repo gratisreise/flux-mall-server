@@ -1,9 +1,10 @@
 package com.fluxmall.member.address.repository;
 
-
 import com.fluxmall.member.address.domain.ShippingAddress;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface ShippingAddressMapper {
@@ -12,13 +13,17 @@ public interface ShippingAddressMapper {
 
     ShippingAddress findDefaultByMemberId(Long memberId);
 
-    List<ShippingAddress> findAllByMemberId(Long memberId);
+    List<ShippingAddress> findByMemberId(Long memberId);
 
-    void save(ShippingAddress shippingAddress);
+    void insert(ShippingAddress shippingAddress);
 
     void update(ShippingAddress shippingAddress);
 
-    void setDefault(Long memberId, Long addressId);
+    void clearDefaultByMemberId(Long memberId);
 
-    void deleteById(Long id);
+    void setDefault(@Param("id") Long id);
+
+    void delete(Long id);
+
+    void deleteByMemberId(Long memberId);
 }

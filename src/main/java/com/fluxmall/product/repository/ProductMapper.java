@@ -1,24 +1,31 @@
 package com.fluxmall.product.repository;
 
-
 import com.fluxmall.product.domain.Product;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface ProductMapper {
 
     Product findById(Long id);
 
-    List<Product> findAllWithPaging(/* Paging Parameter DTO */);
+    List<Product> findAll();
 
-    List<Product> searchByKeyword(/* Search Parameter DTO */);
+    List<Product> findByMemberId(Long memberId);
 
-    void save(Product product);
+    List<Product> findByCategory(String category);
+
+    List<Product> searchByKeyword(@Param("keyword") String keyword);
+
+    void insert(Product product);
 
     void update(Product product);
 
-    void updateStock(Long productId, int quantity);
+    void updateStock(@Param("id") Long id, @Param("stockQuantity") int stockQuantity);
 
-    void softDelete(Long id);
+    void updateStatus(@Param("id") Long id, @Param("productStatus") String productStatus);
+
+    void delete(Long id);
 }

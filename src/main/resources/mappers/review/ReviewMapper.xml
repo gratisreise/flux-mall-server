@@ -1,25 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fluxmall.domain.review.mapper.ReviewMapper">
+<mapper namespace="com.fluxmall.review.repository.ReviewMapper">
 
-  <resultMap id="reviewResultMap" type="com.fluxmall.domain.review.entity.Review">
-    <id property="id" column="id"/>
-    <result property="productId" column="product_id"/>
-    <result property="memberId" column="member_id"/>
-    <result property="orderItemId" column="order_item_id"/>
-    <result property="rating" column="rating"/>
-    <result property="content" column="content"/>
-    <result property="imageUrls" column="image_urls"/>
-    <result property="deleted" column="is_deleted"/>
-    <result property="createdAt" column="created_at"/>
-    <result property="updatedAt" column="updated_at"/>
-  </resultMap>
+    <resultMap id="reviewResultMap" type="com.fluxmall.review.domain.Review">
+        <id property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="orderItemId" column="order_item_id"/>
+        <result property="rating" column="rating"/>
+        <result property="content" column="content"/>
+        <result property="imageUrls" column="image_urls"
+                typeHandler="com.fluxmall.global.config.mybatis.StringListTypeHandler"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="memberNickname" column="nickname"/>
+    </resultMap>
 
-<!--  <select id="findById" resultMap="reviewResultMap"/>-->
-<!--  <select id="findAllByProductId" resultMap="reviewResultMap"/>-->
-<!--  <select id="calculateAverageRating" resultType="double"/>-->
-<!--  <insert id="save" useGeneratedKeys="true" keyProperty="id"/>-->
-<!--  <update id="update"/>-->
-<!--  <update id="softDelete"/>-->
+    <select id="findById" resultMap="reviewResultMap">
+        SELECT r.id, r.product_id, r.member_id, r.order_item_id,
+               r.rating, r.content, r.image_urls, r.is_deleted,
+               r.created_at, r.updated_at, m.nickname
+        FROM reviews r
+        JOIN members m ON r.member_id = m.id
+        WHERE r.id = #{id}
+    </select>
+
+    <select id="findByProductId" resultMap="reviewResultMap">
+        SELECT r.id, r.product_id, r.member_id, r.order_item_id,
+               r.rating, r.content, r.image_urls, r.is_deleted,
+               r.created_at, r.updated_at, m.nickname
+        FROM reviews r
+        JOIN members m ON r.member_id = m.id
+        WHERE r.product_id = #{productId} AND r.is_deleted = false
+        ORDER BY r.created_at DESC
+    </select>
+
+    <select id="findByMemberId" resultMap="reviewResultMap">
+        SELECT r.id, r.product_id, r.member_id, r.order_item_id,
+               r.rating, r.content, r.image_urls, r.is_deleted,
+               r.created_at, r.updated_at, m.nickname
+        FROM reviews r
+        JOIN members m ON r.member_id = m.id
+        WHERE r.member_id = #{memberId} AND r.is_deleted = false
+        ORDER BY r.created_at DESC
+    </select>
+
+    <select id="existsByMemberIdAndProductId" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1 FROM reviews
+            WHERE member_id = #{memberId} AND product_id = #{productId} AND is_deleted = false
+        )
+    </select>
+
+    <select id="existsByMemberIdAndOrderItemId" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1 FROM reviews
+            WHERE member_id = #{memberId} AND order_item_id = #{orderItemId} AND is_deleted = false
+        )
+    </select>
+
+    <select id="calculateAverageRating" resultType="java.lang.Double">
+        SELECT AVG(rating) FROM reviews
+        WHERE product_id = #{productId} AND is_deleted = false
+    </select>
+
+    <select id="countByProductId" resultType="int">
+        SELECT COUNT(*) FROM reviews
+        WHERE product_id = #{productId} AND is_deleted = false
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO reviews (product_id, member_id, order_item_id, rating, content, image_urls, is_deleted, created_at, updated_at)
+        VALUES (#{productId}, #{memberId}, #{orderItemId}, #{rating}, #{content},
+                #{imageUrls, typeHandler=com.fluxmall.global.config.mybatis.StringListTypeHandler},
+                false, NOW(), NOW())
+    </insert>
+
+    <update id="update">
+        UPDATE reviews
+        SET rating = #{rating},
+            content = #{content},
+            image_urls = #{imageUrls, typeHandler=com.fluxmall.global.config.mybatis.StringListTypeHandler},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="softDelete">
+        UPDATE reviews
+        SET is_deleted = true, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByMemberId">
+        DELETE FROM reviews WHERE member_id = #{memberId}
+    </delete>
 
 </mapper>

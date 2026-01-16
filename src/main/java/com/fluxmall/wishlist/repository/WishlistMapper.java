@@ -1,21 +1,27 @@
 package com.fluxmall.wishlist.repository;
 
-
 import com.fluxmall.wishlist.domain.Wishlist;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface WishlistMapper {
 
-    boolean existsByMemberIdAndProductId(Long memberId, Long productId);
+    Wishlist findById(Long id);
 
-    List<Wishlist> findAllByMemberId(Long memberId /* + Paging/Sort */);
+    Wishlist findByMemberIdAndProductId(@Param("memberId") Long memberId, @Param("productId") Long productId);
 
-    void save(Wishlist wishlist);
+    List<Wishlist> findByMemberId(Long memberId);
 
-    void deleteByMemberIdAndProductId(Long memberId, Long productId);
+    boolean existsByMemberIdAndProductId(@Param("memberId") Long memberId, @Param("productId") Long productId);
 
-    void deleteSelected(Long memberId, List<Long> productIds);
+    void insert(Wishlist wishlist);
+
+    void delete(Long id);
+
+    void deleteByMemberIdAndProductId(@Param("memberId") Long memberId, @Param("productId") Long productId);
+
+    void deleteByMemberId(Long memberId);
 }

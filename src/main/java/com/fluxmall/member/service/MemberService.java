@@ -6,6 +6,7 @@ import com.fluxmall.member.dto.request.RegisterRequest;
 import com.fluxmall.member.domain.Member;
 import com.fluxmall.global.exception.BusinessException;
 import com.fluxmall.auth.exception.AuthError;
+import com.fluxmall.member.dto.response.MemberResponse;
 import com.fluxmall.member.repository.MemberMapper;
 import com.fluxmall.global.util.JwtUtil;
 import jakarta.validation.Valid;
@@ -26,7 +27,7 @@ public class MemberService {
      * 회원가입
      */
     @Transactional
-    public Member register(@Valid RegisterRequest request) {
+    public Member register(RegisterRequest request) {
         // 이메일 중복 체크
         if (memberMapper.existsByUsername(request.username())) {
             throw new BusinessException(AuthError.DUPLICATE_USERNAME);
@@ -41,12 +42,7 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(request.password());
 
         // 회원 생성 (기본 역할 = USER)
-        Member member = Member.builder()
-                .username(request.username())
-                .password(encodedPassword)
-                .nickname(request.nickname())
-                .role(Member.MemberRole.USER)
-                .build();
+        Member member = request.toEntity(encodedPassword);
 
         // DB 저장
         memberMapper.insertMember(member);
@@ -109,7 +105,7 @@ public class MemberService {
      * 프로필 수정 (닉네임)
      */
     @Transactional
-    public void updateProfile(Long memberId, String newNickname) {
+    public Member updateProfile(Long memberId, String newNickname) {
         Member member = findById(memberId);
 
         // 닉네임이 변경된 경우 중복 체크
@@ -120,6 +116,7 @@ public class MemberService {
             member.setNickname(newNickname);
             memberMapper.updateMember(member);
         }
+        return member;
     }
 
     /**
@@ -129,5 +126,10 @@ public class MemberService {
     public void changePassword(Long memberId, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         memberMapper.updatePassword(memberId, encodedPassword);
+    }
+
+    public MemberResponse getMember(Long memberId) {
+        Member member = memberMapper.findById(memberId);
+        return MemberResponse.from(member);
     }
 }
