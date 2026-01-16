@@ -1,6 +1,6 @@
-package com.fluxmall.member.address.repository;
+package com.fluxmall.address.repository;
 
-import com.fluxmall.member.address.domain.ShippingAddress;
+import com.fluxmall.address.domain.ShippingAddress;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
