@@ -1,4 +1,4 @@
-package com.fluxmall.member.address.domain;
+package com.fluxmall.address.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

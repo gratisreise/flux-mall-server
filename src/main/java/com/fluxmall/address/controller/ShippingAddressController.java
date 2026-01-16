@@ -1,7 +1,7 @@
-package com.fluxmall.member.address.controller;
+package com.fluxmall.address.controller;
 
 
-import com.fluxmall.member.address.service.ShippingAddressService;
+import com.fluxmall.address.service.ShippingAddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

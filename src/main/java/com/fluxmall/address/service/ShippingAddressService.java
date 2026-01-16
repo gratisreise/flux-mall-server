@@ -1,8 +1,8 @@
-package com.fluxmall.member.address.service;
+package com.fluxmall.address.service;
 
 
-import com.fluxmall.member.address.domain.ShippingAddress;
-import com.fluxmall.member.address.repository.ShippingAddressMapper;
+import com.fluxmall.address.domain.ShippingAddress;
+import com.fluxmall.address.repository.ShippingAddressMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
