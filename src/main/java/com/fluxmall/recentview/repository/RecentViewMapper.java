@@ -1,16 +1,29 @@
 package com.fluxmall.recentview.repository;
 
-
 import com.fluxmall.recentview.domain.RecentView;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface RecentViewMapper {
 
-    List<RecentView> findAllByMemberIdOrderByViewedAtDesc(Long memberId);
+    RecentView findById(Long id);
 
-    void saveOrUpdate(RecentView recentView);
+    RecentView findByMemberIdAndProductId(@Param("memberId") Long memberId, @Param("productId") Long productId);
 
-    void deleteOldestOverLimit(Long memberId, int limit); // 예: 50개 초과 시 오래된 것 삭제
+    List<RecentView> findByMemberId(@Param("memberId") Long memberId, @Param("limit") int limit);
+
+    int countByMemberId(Long memberId);
+
+    void insert(RecentView recentView);
+
+    void updateViewedAt(@Param("memberId") Long memberId, @Param("productId") Long productId);
+
+    void delete(Long id);
+
+    void deleteByMemberId(Long memberId);
+
+    void deleteOldestByMemberId(@Param("memberId") Long memberId, @Param("keepCount") int keepCount);
 }

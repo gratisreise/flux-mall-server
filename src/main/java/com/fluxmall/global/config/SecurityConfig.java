@@ -23,7 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Spring Security 설정
  * JWT 기반 인증 및 역할 기반 접근 제어(RBAC)를 구성합니다.
- *
  * 주요 기능:
  * - JWT 토큰 기반 Stateless 인증
  * - 역할별 엔드포인트 접근 제어 (USER, SELLER, ADMIN)

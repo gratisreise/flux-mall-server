@@ -23,4 +23,5 @@ public class Member {
     public enum MemberRole {
         USER, SELLER, ADMIN
     }
+
 }

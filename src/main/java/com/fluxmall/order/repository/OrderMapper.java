@@ -1,23 +1,30 @@
 package com.fluxmall.order.repository;
 
-
 import com.fluxmall.order.domain.Order;
 import com.fluxmall.order.domain.OrderItem;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface OrderMapper {
 
     Order findById(Long id);
 
-    List<Order> findAllByMemberId(Long memberId /* + Paging */);
+    Order findByOrderNumber(String orderNumber);
 
-    void saveOrder(Order order);
+    List<Order> findByMemberId(Long memberId);
 
-    void saveOrderItem(OrderItem orderItem);
+    List<OrderItem> findOrderItemsByOrderId(Long orderId);
 
-    void updateOrderStatus(Long orderId, String status);
+    void insertOrder(Order order);
 
-    void cancelOrder(Long orderId);
+    void insertOrderItem(OrderItem orderItem);
+
+    void updateStatus(@Param("id") Long id, @Param("orderStatus") String orderStatus);
+
+    void deleteOrder(Long id);
+
+    void deleteOrderItemsByOrderId(Long orderId);
 }
