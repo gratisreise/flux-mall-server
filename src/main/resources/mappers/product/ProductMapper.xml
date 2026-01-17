@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fluxmall.product.repository.ProductMapper">
+
+    <resultMap id="productResultMap" type="com.fluxmall.product.domain.Product">
+        <id property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="description" column="description"/>
+        <result property="category" column="category"/>
+        <result property="price" column="price"/>
+        <result property="stockQuantity" column="stock_quantity"/>
+        <result property="productStatus" column="product_status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findById" resultMap="productResultMap">
+        SELECT id, member_id, product_name, description, category, price,
+               stock_quantity, product_status, created_at, updated_at
+        FROM products
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="productResultMap">
+        SELECT id, member_id, product_name, description, category, price,
+               stock_quantity, product_status, created_at, updated_at
+        FROM products
+        WHERE product_status != 'DISCONTINUED'
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByMemberId" resultMap="productResultMap">
+        SELECT id, member_id, product_name, description, category, price,
+               stock_quantity, product_status, created_at, updated_at
+        FROM products
+        WHERE member_id = #{memberId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByCategory" resultMap="productResultMap">
+        SELECT id, member_id, product_name, description, category, price,
+               stock_quantity, product_status, created_at, updated_at
+        FROM products
+        WHERE category = #{category} AND product_status != 'DISCONTINUED'
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="searchByKeyword" resultMap="productResultMap">
+        SELECT id, member_id, product_name, description, category, price,
+               stock_quantity, product_status, created_at, updated_at
+        FROM products
+        WHERE (product_name LIKE CONCAT('%', #{keyword}, '%')
+               OR description LIKE CONCAT('%', #{keyword}, '%'))
+          AND product_status != 'DISCONTINUED'
+        ORDER BY created_at DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO products (member_id, product_name, description, category, price,
+                              stock_quantity, product_status, created_at, updated_at)
+        VALUES (#{memberId}, #{productName}, #{description}, #{category}, #{price},
+                #{stockQuantity}, #{productStatus}, NOW(), NOW())
+    </insert>
+
+    <update id="update">
+        UPDATE products
+        SET product_name = #{productName},
+            description = #{description},
+            category = #{category},
+            price = #{price},
+            stock_quantity = #{stockQuantity},
+            product_status = #{productStatus},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStock">
+        UPDATE products
+        SET stock_quantity = #{stockQuantity}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE products
+        SET product_status = #{productStatus}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM products WHERE id = #{id}
+    </delete>
+
+</mapper>
