@@ -1,7 +1,7 @@
 package com.fluxmall.order.controller;
 
-
 import com.fluxmall.order.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
+@Tag(name = "Order", description = "주문 API")
 public class OrderController {
 
     private final OrderService orderService;
