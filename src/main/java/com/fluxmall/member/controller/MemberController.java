@@ -6,7 +6,6 @@ import com.fluxmall.global.response.ResponseService;
 import com.fluxmall.global.response.SingleResult;
 import com.fluxmall.member.dto.request.RegisterRequest;
 import com.fluxmall.member.dto.response.MemberResponse;
-import com.fluxmall.member.domain.Member;
 import com.fluxmall.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,7 +37,7 @@ public class MemberController {
     @GetMapping("/me")
     @Operation(summary = "내 정보 조회", description = "현재 로그인한 회원의 정보를 조회합니다.")
     public SingleResult<MemberResponse> getMyInfo(@CurrentMemberId Long memberId) {
-        return ResponseService.getSingleResult(memberService.getMember(memberId));
+        return ResponseService.getSingleResult(memberService.getMyInfo(memberId));
     }
 
     /**
@@ -50,7 +49,6 @@ public class MemberController {
             @CurrentMemberId Long memberId,
             @RequestParam String nickname
     ) {
-        Member member = memberService.updateProfile(memberId, nickname);
-        return ResponseService.getSingleResult(MemberResponse.from(member));
+        return ResponseService.getSingleResult(memberService.updateProfile(memberId, nickname));
     }
 }

@@ -50,8 +50,6 @@ public class JwtUtil {
 
     /**
      * Access Token 생성 (subject = memberId, role claim 포함)
-     * @subject: memberId
-     * @claim: role
      */
     public String createAccessToken(Long memberId, String role) {
         Date now = new Date();
@@ -118,9 +116,6 @@ public class JwtUtil {
 
     /**
      * Access Token 유효성 검증 (상세한 에러 타입 구분)
-     * @param token 검증할 토큰
-     * @return 유효하면 true
-     * @throws BusinessException 토큰이 유효하지 않은 경우 (만료, 잘못된 형식, 지원하지 않는 형식 등)
      */
     public boolean validateAccessToken(String token) {
         try {
