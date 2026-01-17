@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fluxmall.member.repository.MemberMapper">
+
+    <resultMap id="memberResultMap" type="com.fluxmall.member.domain.Member">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="role" column="role"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findById" resultMap="memberResultMap">
+        SELECT id, username, password, nickname, role, created_at, updated_at
+        FROM members
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByUsername" resultMap="memberResultMap">
+        SELECT id, username, password, nickname, role, created_at, updated_at
+        FROM members
+        WHERE username = #{username}
+    </select>
+
+    <select id="findByNickname" resultMap="memberResultMap">
+        SELECT id, username, password, nickname, role, created_at, updated_at
+        FROM members
+        WHERE nickname = #{nickname}
+    </select>
+
+    <select id="existsByUsername" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM members WHERE username = #{username})
+    </select>
+
+    <select id="existsByNickname" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM members WHERE nickname = #{nickname})
+    </select>
+
+    <insert id="insertMember" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO members (username, password, nickname, role, created_at, updated_at)
+        VALUES (#{username}, #{password}, #{nickname}, #{role}, NOW(), NOW())
+    </insert>
+
+    <update id="updateMember">
+        UPDATE members
+        SET nickname = #{nickname}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE members
+        SET password = #{encodedPassword}, updated_at = NOW()
+        WHERE id = #{memberId}
+    </update>
+
+</mapper>

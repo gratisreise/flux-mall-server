@@ -20,6 +20,8 @@ spring:
 jwt:
   access_secret: ${JWT_ACCESS_SECRET}
   refersh_secret: ${JWT_REFRESH_SECRET}
+  access_validity: 1800000
+  refresh_validity: 604800000
 
 # S3 버킷명 운영 전용
 app:

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fluxmall.order.repository.OrderMapper">
+
+    <resultMap id="orderResultMap" type="com.fluxmall.order.domain.Order">
+        <id property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="orderNumber" column="order_number"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="shippingAddress" column="shipping_address"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="orderItemResultMap" type="com.fluxmall.order.domain.OrderItem">
+        <id property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="price" column="price"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findById" resultMap="orderResultMap">
+        SELECT id, member_id, order_number, total_price, order_status,
+               shipping_address, created_at, updated_at
+        FROM orders
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByOrderNumber" resultMap="orderResultMap">
+        SELECT id, member_id, order_number, total_price, order_status,
+               shipping_address, created_at, updated_at
+        FROM orders
+        WHERE order_number = #{orderNumber}
+    </select>
+
+    <select id="findByMemberId" resultMap="orderResultMap">
+        SELECT id, member_id, order_number, total_price, order_status,
+               shipping_address, created_at, updated_at
+        FROM orders
+        WHERE member_id = #{memberId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findOrderItemsByOrderId" resultMap="orderItemResultMap">
+        SELECT id, order_id, product_id, product_name, price, quantity, created_at, updated_at
+        FROM order_item
+        WHERE order_id = #{orderId}
+    </select>
+
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (member_id, order_number, total_price, order_status,
+                            shipping_address, created_at, updated_at)
+        VALUES (#{memberId}, #{orderNumber}, #{totalPrice}, #{orderStatus},
+                #{shippingAddress}, NOW(), NOW())
+    </insert>
+
+    <insert id="insertOrderItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_item (order_id, product_id, product_name, price, quantity,
+                                created_at, updated_at)
+        VALUES (#{orderId}, #{productId}, #{productName}, #{price}, #{quantity}, NOW(), NOW())
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE orders
+        SET order_status = #{orderStatus}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteOrder">
+        DELETE FROM orders WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteOrderItemsByOrderId">
+        DELETE FROM order_item WHERE order_id = #{orderId}
+    </delete>
+
+</mapper>

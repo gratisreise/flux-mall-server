@@ -18,10 +18,6 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-jwt:
-  access-secret: ${JWT_ACCESS_SECRET}
-  refresh-secret: ${JWT_REFRESH_SECRET}
-
 logging:
   level:
     com.example: DEBUG
