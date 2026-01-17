@@ -10,7 +10,8 @@
       "mcp__serena__find_symbol",
       "Bash(./gradlew compileJava:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(./gradlew build:*)"
     ]
   }
 }
