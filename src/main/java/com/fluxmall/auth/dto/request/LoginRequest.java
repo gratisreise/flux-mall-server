@@ -1,4 +1,4 @@
-package com.fluxmall.member.dto.request;
+package com.fluxmall.auth.dto.request;
 
 import com.fluxmall.global.annotation.Password;
 import jakarta.validation.constraints.NotBlank;
