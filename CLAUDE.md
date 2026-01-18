@@ -357,6 +357,16 @@ public enum DomainError implements ErrorCode {
 
 ## Development Guidelines
 
+### Development Workflow Reference
+**상세 개발 워크플로우는 `.claude/development-workflow.md` 파일을 참고하세요.**
+
+이 문서에는 다음 내용이 포함되어 있습니다:
+- **Phase 1**: 설계 및 문서화 (Pre-Coding) - SQL 전략 수립, 데이터 모델링
+- **Phase 2**: 도메인 및 레포지토리 구현 - MyBatis XML, ResultMap 작성
+- **Phase 3**: 서비스 계층 TDD - 테스트 전략, Red-Green-Refactor
+- **Phase 4**: 컨트롤러 계층 구현 - 입력값 검증, DTO 매핑
+- **Phase 5**: 통합 테스트 및 최적화 - Testcontainers, SQL 성능 최적화
+
 ### Adding New Features
 1. Define entity in `{domain}/domain/` package
 2. Create Request/Response DTOs in `{domain}/dto/request/`, `{domain}/dto/response/`
