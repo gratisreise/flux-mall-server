@@ -4,8 +4,8 @@
 
 | Milestone | Target | Priority | Status |
 |-----------|--------|----------|--------|
-| M1 | 인프라 및 인증 시스템 | 🔴 Critical | 🔄 In Progress |
-| M2 | 상품 도메인 | 🟡 High | ⏳ Pending |
+| M1 | 인프라 및 인증 시스템 | 🔴 Critical | ✅ Completed |
+| M2 | 상품 도메인 | 🟡 High | ✅ Completed |
 | M3 | 구매 프로세스 (장바구니/주문) | 🟡 High | ⏳ Pending |
 | M4 | 사용자 경험 (위시리스트/최근본상품) | 🟢 Medium | ⏳ Pending |
 | M5 | 리뷰 및 평점 시스템 | 🟢 Medium | ⏳ Pending |
@@ -31,11 +31,11 @@ JWT 기반 인증 시스템 완성 및 역할 기반 접근 제어(RBAC) 구현
 - [x] ExceptionHandlerFilter: BusinessException JSON 응답 개선
 - [x] AuthError: 토큰 관련 에러 코드 세분화 (AU001~AU032)
 
-#### 1.3 회원가입 API 구현 ⏳
-- [ ] `POST /api/members/register`
-- [ ] 이메일/닉네임 중복 체크
-- [ ] 비밀번호 BCrypt 암호화
-- [ ] 기본 역할 = USER
+#### 1.3 회원가입 API 구현 ✅
+- [x] `POST /api/members/register`
+- [x] 이메일/닉네임 중복 체크
+- [x] 비밀번호 BCrypt 암호화
+- [x] 기본 역할 = USER
 
 **구현 위치**:
 ```
@@ -44,84 +44,84 @@ Service: MemberService.register(RegisterRequest)
 Mapper: MemberMapper.insertMember(), existsByUsername(), existsByNickname()
 ```
 
-#### 1.4 로그인 API 구현 ⏳
-- [ ] `POST /api/auth/login`
-- [ ] 사용자 인증 (username + password)
-- [ ] JWT Access Token + Refresh Token 발급
-- [ ] Token에 role 포함
+#### 1.4 로그인 API 구현 ✅
+- [x] `POST /api/auth/login`
+- [x] 사용자 인증 (username + password)
+- [x] JWT Access Token + Refresh Token 발급
+- [x] Token에 role 포함
 
 **구현 위치**:
 ```
 Controller: AuthController.login()
-Service: MemberService.authenticate(LoginRequest)
+Service: AuthService.login(LoginRequest)
 ```
 
-#### 1.5 로그아웃 API 구현 ⏳
-- [ ] `POST /api/auth/logout`
-- [ ] Refresh Token Blacklist 추가 (Redis TTL)
+#### 1.5 로그아웃 API 구현 ✅
+- [x] `POST /api/auth/logout`
+- [x] Refresh Token Blacklist 추가 (Redis TTL)
 
 **구현 위치**:
 ```
 Controller: AuthController.logout()
-Service: TokenBlacklistService.addToBlacklist()
+Service: AuthService.logout(), TokenBlacklistService.addToBlacklist()
 ```
 
-#### 1.6 내 정보 조회/수정 API ⏳
-- [ ] `GET /api/members/me`
-- [ ] `PATCH /api/members/me`
-- [ ] JWT에서 memberId 추출
+#### 1.6 내 정보 조회/수정 API ✅
+- [x] `GET /api/members/me`
+- [x] `PATCH /api/members/me`
+- [x] JWT에서 memberId 추출
 
 **구현 위치**:
 ```
 Controller: MemberController.getMyInfo(), updateMyInfo()
-Service: MemberService.findById(), updateProfile()
+Service: MemberService.getMyInfo(), updateProfile()
 ```
 
 ### Acceptance Criteria
-- [ ] 회원가입 후 로그인 시 JWT 토큰 발급
-- [ ] Access Token으로 보호된 API 접근 가능
-- [ ] 로그아웃 후 해당 토큰으로 접근 불가
-- [ ] 역할별 API 접근 제어 동작
+- [x] 회원가입 후 로그인 시 JWT 토큰 발급
+- [x] Access Token으로 보호된 API 접근 가능
+- [x] 로그아웃 후 해당 토큰으로 접근 불가
+- [x] 역할별 API 접근 제어 동작
 
 ---
 
-## M2: 상품 도메인 🟡
+## M2: 상품 도메인 ✅
 
 ### 목표
 상품 CRUD 및 검색 기능 구현 (공개 API + SELLER 전용 API)
 
 ### Tasks
 
-#### 2.1 공개 상품 API (비로그인 가능)
-- [ ] `GET /api/products` - 상품 목록 조회 (페이징, 필터링, 정렬)
-- [ ] `GET /api/products/search` - 키워드 검색 (LIKE %keyword%)
-- [ ] `GET /api/products/{productId}` - 상품 상세 조회 (재고, 평점)
+#### 2.1 공개 상품 API (비로그인 가능) ✅
+- [x] `GET /api/products` - 상품 목록 조회 (페이징, 필터링, 정렬)
+- [x] `GET /api/products/search` - 키워드 검색 (LIKE %keyword%)
+- [x] `GET /api/products/{productId}` - 상품 상세 조회 (재고, 평점)
 
 **구현 위치**:
 ```
 Controller: ProductController.getProducts(), searchProducts(), getProduct()
-Service: ProductService.getProducts(), searchByKeyword(), getProductDetail()
-Mapper: ProductMapper.selectProductsWithFilters(), searchByKeyword(), selectProductWithDetails()
+Service: ProductService.getProducts(), searchProducts(), getProductDetail()
+Mapper: ProductMapper.findAllWithFilters(), searchByKeywordWithPaging(), findById()
 ```
 
-#### 2.2 SELLER 전용 상품 관리 API
-- [ ] `POST /api/seller/products` - 상품 등록 (@PreAuthorize("hasRole('SELLER')"))
-- [ ] `PATCH /api/seller/products/{productId}` - 상품 수정 (본인 상품만)
-- [ ] `DELETE /api/seller/products/{productId}` - 상품 삭제 (Soft Delete)
-- [ ] `PATCH /api/seller/products/{productId}/status` - 품절/판매중 상태 변경
+#### 2.2 SELLER 전용 상품 관리 API ✅
+- [x] `POST /api/seller/products` - 상품 등록 (@PreAuthorize("hasRole('SELLER')"))
+- [x] `PATCH /api/seller/products/{productId}` - 상품 수정 (본인 상품만)
+- [x] `DELETE /api/seller/products/{productId}` - 상품 삭제 (Soft Delete)
+- [x] `PATCH /api/seller/products/{productId}/status` - 품절/판매중 상태 변경
 
 **구현 위치**:
 ```
-Controller: ProductController (with @PreAuthorize)
-Service: ProductService.createProduct(), updateProduct(), softDeleteProduct(), updateProductStatus()
-Mapper: ProductMapper.insertProduct(), updateProduct(), softDeleteProduct(), updateProductStatus()
+Controller: SellerProductController (with @PreAuthorize)
+Service: ProductService.createProduct(), updateProduct(), deleteProduct(), updateProductStatus()
+Mapper: ProductMapper.insert(), update(), softDelete(), updateStatus()
 ```
 
 ### Acceptance Criteria
-- [ ] 비로그인 사용자가 상품 목록/검색/상세 조회 가능
-- [ ] SELLER만 상품 등록/수정/삭제 가능
-- [ ] 재고 0 시 자동 품절 처리
-- [ ] Soft Delete 시 목록에서 제외
+- [x] 비로그인 사용자가 상품 목록/검색/상세 조회 가능
+- [x] SELLER만 상품 등록/수정/삭제 가능
+- [x] 재고 0 시 자동 품절 처리
+- [x] Soft Delete 시 목록에서 제외
 
 ---
 
@@ -349,14 +349,15 @@ if (product.getStockQuantity() == 0) {
 ## Progress Tracking
 
 ### Current Status
-- **Milestone 1**: 🔄 In Progress (JWT 필터 개선 완료, API 구현 대기)
-- **Milestone 2-6**: ⏳ Pending
+- **Milestone 1**: ✅ Completed (DB 스키마, JWT 필터 개선, 회원가입/로그인/로그아웃/내 정보 API 완료)
+- **Milestone 2**: ✅ Completed (공개 상품 API + SELLER 전용 상품 관리 API 완료)
+- **Milestone 3**: 🔄 Next (장바구니/주문 구현)
+- **Milestone 4-6**: ⏳ Pending
 
 ### Next Actions
-1. `MemberMapper.xml` 작성 (회원 CRUD SQL)
-2. `MemberService.register()` 구현
-3. `AuthController.login()` 구현
-4. 단위 테스트 작성
+1. Phase 3.1 - 장바구니 API 구현 (조회, 추가, 수량 수정, 삭제)
+2. Phase 3.2 - 주문 API 구현 (생성, 결제, 목록, 상세, 취소)
+3. 동시성 제어 및 재고 관리
 
 ---
 
@@ -369,5 +370,5 @@ if (product.getStockQuantity() == 0) {
 
 ---
 
-**Last Updated**: 2026-01-15
+**Last Updated**: 2026-01-18
 **Author**: Claude Code
