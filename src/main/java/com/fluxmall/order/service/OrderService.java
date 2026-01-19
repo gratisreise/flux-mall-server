@@ -145,6 +145,74 @@ public class OrderService {
         return OrderResponse.from(orderWithItems);
     }
 
+    @Transactional
+    public void payOrder(Long memberId, Long orderId) {
+        // 비관적 락으로 주문 조회
+        Order order = orderMapper.findByIdForUpdate(orderId);
+        if (order == null) {
+            throw new BusinessException(OrderError.NOT_FOUND);
+        }
+        if (!order.getMemberId().equals(memberId)) {
+            throw new BusinessException(OrderError.NOT_ORDER_OWNER);
+        }
+        if (order.getOrderStatus() != OrderStatus.PENDING) {
+            if (order.getOrderStatus() == OrderStatus.PAID) {
+                throw new BusinessException(OrderError.ALREADY_PAID);
+            }
+            throw new BusinessException(OrderError.CANNOT_PAY);
+        }
+
+        // 주문 상품별 재고 차감
+        List<OrderItem> orderItems = orderMapper.findOrderItemsByOrderId(orderId);
+        for (OrderItem item : orderItems) {
+            Product product = productMapper.findByIdForUpdate(item.getProductId());
+            if (product == null) {
+                throw new BusinessException(OrderError.CANNOT_PAY);
+            }
+            if (product.getStockQuantity() < item.getQuantity()) {
+                throw new BusinessException(OrderError.INSUFFICIENT_STOCK);
+            }
+            int newStock = product.getStockQuantity() - item.getQuantity();
+            productMapper.updateStock(product.getId(), newStock);
+        }
+
+        // 주문 상태 변경
+        orderMapper.updateStatus(orderId, OrderStatus.PAID.name());
+    }
+
+    @Transactional
+    public void cancelOrder(Long memberId, Long orderId) {
+        // 비관적 락으로 주문 조회
+        Order order = orderMapper.findByIdForUpdate(orderId);
+        if (order == null) {
+            throw new BusinessException(OrderError.NOT_FOUND);
+        }
+        if (!order.getMemberId().equals(memberId)) {
+            throw new BusinessException(OrderError.NOT_ORDER_OWNER);
+        }
+        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+            throw new BusinessException(OrderError.ALREADY_CANCELLED);
+        }
+        if (order.getOrderStatus() == OrderStatus.SHIPPED || order.getOrderStatus() == OrderStatus.DELIVERED) {
+            throw new BusinessException(OrderError.CANNOT_CANCEL);
+        }
+
+        // 결제 완료 상태였다면 재고 복원
+        if (order.getOrderStatus() == OrderStatus.PAID) {
+            List<OrderItem> orderItems = orderMapper.findOrderItemsByOrderId(orderId);
+            for (OrderItem item : orderItems) {
+                Product product = productMapper.findByIdForUpdate(item.getProductId());
+                if (product != null) {
+                    int newStock = product.getStockQuantity() + item.getQuantity();
+                    productMapper.updateStock(product.getId(), newStock);
+                }
+            }
+        }
+
+        // 주문 상태 변경
+        orderMapper.updateStatus(orderId, OrderStatus.CANCELLED.name());
+    }
+
     private String generateOrderNumber() {
         return "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }

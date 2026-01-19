@@ -1,6 +1,7 @@
 package com.fluxmall.order.controller;
 
 import com.fluxmall.global.annotation.CurrentMemberId;
+import com.fluxmall.global.response.CommonResult;
 import com.fluxmall.global.response.ListResult;
 import com.fluxmall.global.response.ResponseService;
 import com.fluxmall.global.response.SingleResult;
@@ -55,5 +56,25 @@ public class OrderController {
             @Parameter(description = "주문 ID", required = true) @PathVariable Long orderId
     ) {
         return ResponseService.getSingleResult(orderService.findById(memberId, orderId));
+    }
+
+    @PostMapping("/{orderId}/pay")
+    @Operation(summary = "주문 결제", description = "주문을 결제합니다. 재고가 차감됩니다.")
+    public CommonResult payOrder(
+            @CurrentMemberId Long memberId,
+            @Parameter(description = "주문 ID", required = true) @PathVariable Long orderId
+    ) {
+        orderService.payOrder(memberId, orderId);
+        return ResponseService.getSuccessResult();
+    }
+
+    @PostMapping("/{orderId}/cancel")
+    @Operation(summary = "주문 취소", description = "주문을 취소합니다. 결제 완료 상태였다면 재고가 복원됩니다.")
+    public CommonResult cancelOrder(
+            @CurrentMemberId Long memberId,
+            @Parameter(description = "주문 ID", required = true) @PathVariable Long orderId
+    ) {
+        orderService.cancelOrder(memberId, orderId);
+        return ResponseService.getSuccessResult();
     }
 }
