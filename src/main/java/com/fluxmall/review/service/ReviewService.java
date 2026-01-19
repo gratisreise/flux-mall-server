@@ -144,4 +144,16 @@ public class ReviewService {
         }
         return null;
     }
+
+    /**
+     * 리뷰 강제 삭제 - Hard Delete (ADMIN)
+     */
+    @Transactional
+    public void forceDeleteReview(Long reviewId) {
+        Review review = reviewMapper.findById(reviewId);
+        if (review == null) {
+            throw new BusinessException(ReviewError.NOT_FOUND);
+        }
+        reviewMapper.delete(reviewId);
+    }
 }

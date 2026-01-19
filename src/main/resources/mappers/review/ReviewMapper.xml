@@ -116,6 +116,10 @@
         WHERE id = #{id}
     </update>
 
+    <delete id="delete">
+        DELETE FROM reviews WHERE id = #{id}
+    </delete>
+
     <delete id="deleteByMemberId">
         DELETE FROM reviews WHERE member_id = #{memberId}
     </delete>

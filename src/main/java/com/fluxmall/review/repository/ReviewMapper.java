@@ -37,5 +37,7 @@ public interface ReviewMapper {
 
     void softDelete(Long id);
 
+    void delete(Long id);
+
     void deleteByMemberId(Long memberId);
 }
