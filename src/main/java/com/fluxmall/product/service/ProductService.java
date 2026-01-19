@@ -177,4 +177,16 @@ public class ProductService {
                 .map(ProductResponse::from)
                 .toList();
     }
+
+    /**
+     * 상품 강제 삭제 - Hard Delete (ADMIN)
+     */
+    @Transactional
+    public void forceDeleteProduct(Long productId) {
+        Product product = productMapper.findById(productId);
+        if (product == null) {
+            throw new BusinessException(ProductError.NOT_FOUND);
+        }
+        productMapper.delete(productId);
+    }
 }
