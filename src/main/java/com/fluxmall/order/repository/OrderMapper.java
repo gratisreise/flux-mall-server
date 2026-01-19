@@ -16,6 +16,14 @@ public interface OrderMapper {
 
     List<Order> findByMemberId(Long memberId);
 
+    List<Order> findByMemberIdWithPaging(
+            @Param("memberId") Long memberId,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
+
+    int countByMemberId(Long memberId);
+
     List<OrderItem> findOrderItemsByOrderId(Long orderId);
 
     void insertOrder(Order order);
