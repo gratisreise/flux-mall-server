@@ -12,6 +12,8 @@ public interface OrderMapper {
 
     Order findById(Long id);
 
+    Order findByIdForUpdate(Long id);
+
     Order findByOrderNumber(String orderNumber);
 
     List<Order> findByMemberId(Long memberId);

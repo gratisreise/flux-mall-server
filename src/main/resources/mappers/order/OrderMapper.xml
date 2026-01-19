@@ -31,6 +31,14 @@
         WHERE id = #{id}
     </select>
 
+    <select id="findByIdForUpdate" resultMap="orderResultMap">
+        SELECT id, member_id, order_number, total_price, order_status,
+               shipping_address, created_at, updated_at
+        FROM orders
+        WHERE id = #{id}
+        FOR UPDATE
+    </select>
+
     <select id="findByOrderNumber" resultMap="orderResultMap">
         SELECT id, member_id, order_number, total_price, order_status,
                shipping_address, created_at, updated_at

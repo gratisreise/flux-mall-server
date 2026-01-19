@@ -22,6 +22,14 @@
         WHERE id = #{id}
     </select>
 
+    <select id="findByIdForUpdate" resultMap="productResultMap">
+        SELECT id, member_id, product_name, description, category, price,
+               stock_quantity, product_status, created_at, updated_at
+        FROM products
+        WHERE id = #{id}
+        FOR UPDATE
+    </select>
+
     <select id="findAll" resultMap="productResultMap">
         SELECT id, member_id, product_name, description, category, price,
                stock_quantity, product_status, created_at, updated_at
