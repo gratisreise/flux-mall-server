@@ -11,6 +11,8 @@ public interface ProductMapper {
 
     Product findById(Long id);
 
+    Product findByIdForUpdate(Long id);
+
     List<Product> findAll();
 
     List<Product> findByMemberId(Long memberId);

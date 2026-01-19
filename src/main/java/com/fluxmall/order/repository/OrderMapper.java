@@ -12,9 +12,19 @@ public interface OrderMapper {
 
     Order findById(Long id);
 
+    Order findByIdForUpdate(Long id);
+
     Order findByOrderNumber(String orderNumber);
 
     List<Order> findByMemberId(Long memberId);
+
+    List<Order> findByMemberIdWithPaging(
+            @Param("memberId") Long memberId,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
+
+    int countByMemberId(Long memberId);
 
     List<OrderItem> findOrderItemsByOrderId(Long orderId);
 
