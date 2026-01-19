@@ -261,9 +261,22 @@ public interface DomainMapper {
 
 ### DTO Convention
 
+**상세 네이밍 규칙은 `.claude/dtoconvention.md` 파일을 참고하세요.**
+
+**네이밍 패턴: `{Entity}{Action}{Type}`**
+
+| 상황 | 패턴 | 예시 |
+|------|------|------|
+| 엔티티 생성 요청 | `{Entity}CreateRequest` | `ProductCreateRequest` |
+| 엔티티 수정 요청 | `{Entity}UpdateRequest` | `ProductUpdateRequest` |
+| 하위 엔티티 추가 | `{Parent}{Child}AddRequest` | `CartItemAddRequest` |
+| 단건 응답 | `{Entity}Response` | `ProductResponse` |
+| 목록 응답 (간략) | `{Entity}ListResponse` | `OrderListResponse` |
+| 인증 요청 (예외) | `{Action}Request` | `LoginRequest` |
+
 ```java
 // Request DTO (record + validation)
-public record CreateRequest(
+public record ProductCreateRequest(
     @NotBlank(message = "이름은 필수입니다")
     @Size(max = 50, message = "이름은 50자 이하입니다")
     String name,
@@ -272,8 +285,8 @@ public record CreateRequest(
     @Positive(message = "가격은 양수여야 합니다")
     Integer price
 ) {
-    public Domain toEntity() {
-        return Domain.builder()
+    public Product toEntity() {
+        return Product.builder()
             .name(name)
             .price(price)
             .build();
@@ -281,18 +294,18 @@ public record CreateRequest(
 }
 
 // Response DTO (record + factory method)
-public record DomainResponse(
+public record ProductResponse(
     Long id,
     String name,
     Integer price,
     LocalDateTime createdAt
 ) {
-    public static DomainResponse from(Domain domain) {
-        return new DomainResponse(
-            domain.getId(),
-            domain.getName(),
-            domain.getPrice(),
-            domain.getCreatedAt()
+    public static ProductResponse from(Product product) {
+        return new ProductResponse(
+            product.getId(),
+            product.getName(),
+            product.getPrice(),
+            product.getCreatedAt()
         );
     }
 }
