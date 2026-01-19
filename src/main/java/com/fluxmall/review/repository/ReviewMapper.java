@@ -13,6 +13,14 @@ public interface ReviewMapper {
 
     List<Review> findByProductId(Long productId);
 
+    List<Review> findByProductIdWithPaging(
+            @Param("productId") Long productId,
+            @Param("hasImage") Boolean hasImage,
+            @Param("sort") String sort,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
+
     List<Review> findByMemberId(Long memberId);
 
     boolean existsByMemberIdAndProductId(@Param("memberId") Long memberId, @Param("productId") Long productId);
