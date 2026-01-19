@@ -37,6 +37,22 @@
         ORDER BY w.created_at DESC
     </select>
 
+    <select id="findByMemberIdWithPaging" resultMap="wishlistResultMap">
+        SELECT w.id, w.member_id, w.product_id, w.created_at,
+               p.product_name, p.price, p.product_status
+        FROM wishlists w
+        JOIN products p ON w.product_id = p.id
+        WHERE w.member_id = #{memberId}
+        ORDER BY w.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countByMemberId" resultType="int">
+        SELECT COUNT(*)
+        FROM wishlists
+        WHERE member_id = #{memberId}
+    </select>
+
     <select id="existsByMemberIdAndProductId" resultType="boolean">
         SELECT EXISTS(
             SELECT 1 FROM wishlists
