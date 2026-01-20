@@ -11,7 +11,8 @@
       "Bash(./gradlew compileJava:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(./gradlew build:*)"
+      "Bash(./gradlew build:*)",
+      "mcp__serena__list_memories"
     ]
   }
 }

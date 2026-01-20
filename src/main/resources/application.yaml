@@ -19,7 +19,7 @@ spring:
 
 
 mybatis:
-  mapper-locations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:mappers/**/*.xml
   type-aliases-package: com.fluxmall.domain.**.dto, com.fluxmall.domain.**.entity
   configuration:
     map-underscore-to-camel-case: true
