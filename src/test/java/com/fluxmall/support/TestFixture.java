@@ -9,6 +9,7 @@ import com.fluxmall.order.domain.OrderItem;
 import com.fluxmall.product.domain.Product;
 import com.fluxmall.review.domain.Review;
 import com.fluxmall.wishlist.domain.Wishlist;
+import com.fluxmall.recentview.domain.RecentView;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -301,6 +302,32 @@ public class TestFixture {
                 createShippingAddress(1L, memberId, true),
                 createShippingAddress(2L, memberId, false),
                 createShippingAddress(3L, memberId, false)
+        );
+    }
+
+    // ==================== RecentView ====================
+
+    public static RecentView createRecentView() {
+        return createRecentView(1L, 1L, 1L);
+    }
+
+    public static RecentView createRecentView(Long id, Long memberId, Long productId) {
+        return RecentView.builder()
+                .id(id)
+                .memberId(memberId)
+                .productId(productId)
+                .viewedAt(LocalDateTime.now())
+                .productName("테스트 상품")
+                .productPrice(10000)
+                .productStatus("ON_SALE")
+                .build();
+    }
+
+    public static List<RecentView> createRecentViews(Long memberId) {
+        return List.of(
+                createRecentView(1L, memberId, 1L),
+                createRecentView(2L, memberId, 2L),
+                createRecentView(3L, memberId, 3L)
         );
     }
 }
