@@ -1,0 +1,147 @@
+{
+  "name": "Karrot Market Inspired Color Theme",
+  "description": "Karrot Market style color theme",
+  "colors": {
+    "primary": {
+      "orange": {
+        "main": "#FF6F0F",
+        "dark": "#E65A00",
+        "light": "#FF8C3D",
+        "description": "Primary brand color"
+      }
+    },
+    "secondary": {
+      "green": {
+        "main": "#00B686",
+        "dark": "#00916B",
+        "light": "#26D4A3",
+        "description": "Secondary color - freshness, safety"
+      }
+    },
+    "neutral": {
+      "gray": {
+        "900": "#1E1E1E",
+        "800": "#363636",
+        "700": "#545454",
+        "600": "#737373",
+        "500": "#999999",
+        "400": "#BDBDBD",
+        "300": "#E0E0E0",
+        "200": "#EEEEEE",
+        "100": "#F7F7F7",
+        "50": "#FAFAFA"
+      },
+      "white": {
+        "main": "#FFFFFF",
+        "off": "#FAFAFA"
+      },
+      "black": {
+        "main": "#000000"
+      }
+    },
+    "semantic": {
+      "success": {
+        "main": "#00B686",
+        "background": "#E6F7F2",
+        "text": "#00916B"
+      },
+      "warning": {
+        "main": "#FF9500",
+        "background": "#FFF4E6",
+        "text": "#CC7700"
+      },
+      "error": {
+        "main": "#FF3B30",
+        "background": "#FFECEC",
+        "text": "#CC2F26"
+      },
+      "info": {
+        "main": "#007AFF",
+        "background": "#E6F2FF",
+        "text": "#0062CC"
+      }
+    },
+    "background": {
+      "primary": "#FFFFFF",
+      "secondary": "#F7F7F7",
+      "tertiary": "#EEEEEE",
+      "overlay": "rgba(0, 0, 0, 0.5)"
+    },
+    "text": {
+      "primary": "#1E1E1E",
+      "secondary": "#545454",
+      "tertiary": "#999999",
+      "disabled": "#BDBDBD",
+      "inverse": "#FFFFFF"
+    },
+    "border": {
+      "default": "#EEEEEE",
+      "focus": "#FF6F0F",
+      "error": "#FF3B30",
+      "disabled": "#F7F7F7"
+    },
+    "button": {
+      "primary": {
+        "default": "#FF6F0F",
+        "hover": "#E65A00",
+        "active": "#CC5000",
+        "disabled": "#EEEEEE",
+        "text": "#FFFFFF"
+      },
+      "secondary": {
+        "default": "#FFFFFF",
+        "hover": "#F7F7F7",
+        "active": "#EEEEEE",
+        "disabled": "#FAFAFA",
+        "text": "#FF6F0F",
+        "border": "#FF6F0F"
+      },
+      "tertiary": {
+        "default": "transparent",
+        "hover": "#FFF4E6",
+        "active": "#FFE6CC",
+        "disabled": "transparent",
+        "text": "#FF6F0F"
+      }
+    },
+    "input": {
+      "default": {
+        "background": "#FFFFFF",
+        "border": "#EEEEEE",
+        "text": "#1E1E1E",
+        "placeholder": "#BDBDBD"
+      },
+      "focus": {
+        "border": "#FF6F0F",
+        "ring": "rgba(255, 111, 15, 0.1)"
+      },
+      "error": {
+        "border": "#FF3B30",
+        "text": "#FF3B30"
+      },
+      "disabled": {
+        "background": "#F7F7F7",
+        "border": "#EEEEEE",
+        "text": "#BDBDBD"
+      }
+    },
+    "shadow": {
+      "xs": "0 1px 2px rgba(0, 0, 0, 0.05)",
+      "sm": "0 1px 3px rgba(0, 0, 0, 0.1)",
+      "md": "0 4px 6px rgba(0, 0, 0, 0.07)",
+      "lg": "0 10px 15px rgba(0, 0, 0, 0.1)",
+      "xl": "0 20px 25px rgba(0, 0, 0, 0.1)"
+    },
+    "rating": {
+      "full": "#FF6F0F",
+      "half": "#FF8C3D",
+      "empty": "#EEEEEE"
+    }
+  },
+  "usage": {
+    "brand": "Use primary.orange for key brand elements, CTA buttons, and emphasized elements",
+    "accent": "Use secondary.green for auxiliary elements, badges, and tags",
+    "text": "Use text.primary for body text, text.secondary for secondary text",
+    "background": "Use background.primary for main backgrounds, background.secondary for section separation"
+  }
+}
